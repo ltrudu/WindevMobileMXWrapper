@@ -1,3 +1,9 @@
+This library is available in jcenter.
+Add the following line in your module build.gradle to include it :
+api 'com.zebra.windevmobilemxwrapper:windevmobilemxwrapper:7.0.0'
+Don't forget to add the EMDK librairy too:
+api 'com.symbol:emdk:7.0.0'
+
 # END USER LICENSE AGREEMENT (UNRESTRICTED SOFTWARE)
 
 
