@@ -9,8 +9,8 @@ import android.util.Xml;
 import java.io.StringReader;
 import java.util.ArrayList;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson_custom.Gson;
+import com.google.gson_custom.GsonBuilder;
 import com.symbol.emdk.EMDKBase;
 import com.symbol.emdk.EMDKException;
 import com.symbol.emdk.EMDKManager;
