@@ -2,12 +2,17 @@ package com.zebra.windevmobilemxwrapper;
 
 // Android / Java imports
 import android.app.Activity;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Base64;
 
 import com.google.gson_custom.Gson;
 import com.google.gson_custom.GsonBuilder;
@@ -403,6 +408,86 @@ public class WindevMobileMXFacade {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getApplicationSignatureBase64(final String fsCallbackSucces, final String fsCallbackErreur)
+    {
+        try {
+            Activity activity = getActivity();
+
+            if (activity == null) {
+                if (fsCallbackErreur != "") {
+                    if (mAppelProcedureWL != null) {
+
+                        mAppelProcedureWL.appelProcedureWLSSSS(fsCallbackErreur, "getApplicationSignatureBase64", "Erreur lors de la récupération de l'activité courrante.", "getActivity() a retourné Null");
+                    }
+                }
+                logMessage("getApplicationSignatureBase64 Error, getActivity() returned null.");
+                return;
+            }
+
+            PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), PackageManager.GET_SIGNING_CERTIFICATES);
+
+
+            // Use custom signature if it has been set by the user
+            Signature sig = null;
+
+            // Nope, we will get the first apk signing certificate that we find
+            // You can copy/paste this snippet if you want to provide your own
+            // certificate
+            // TODO: use the following code snippet to extract your custom certificate if necessary
+            final Signature[] arrSignatures;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                arrSignatures = packageInfo.signingInfo.getApkContentsSigners();
+            }
+            else
+            {
+                arrSignatures = packageInfo.signatures;
+            }
+            if (arrSignatures == null || arrSignatures.length == 0) {
+                if (fsCallbackErreur != "") {
+                    if (mAppelProcedureWL != null) {
+                        mAppelProcedureWL.appelProcedureWLSSSS(fsCallbackErreur, "getApplicationSignatureBase64", "Signatures array is empty", "");
+                    }
+                 }
+                logMessage("getApplicationSignatureBase64 Signatures array is empty");
+                return;
+            }
+            sig = arrSignatures[0];
+            /*
+             * Get the X.509 certificate.
+             */
+            final byte[] rawCert = sig.toByteArray();
+
+            // Get the certificate as a base64 string
+            String encoded = null;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                encoded = Base64.getEncoder().encodeToString(rawCert);
+            }
+            else
+            {
+                encoded = android.util.Base64.encodeToString(rawCert, android.util.Base64.NO_WRAP);
+            }
+
+            if (fsCallbackSucces != "") {
+                if (mAppelProcedureWL != null) {
+
+                    mAppelProcedureWL.appelProcedureWLSS(fsCallbackSucces, encoded);
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            if (fsCallbackErreur != "") {
+                if (mAppelProcedureWL != null) {
+
+                    mAppelProcedureWL.appelProcedureWLSSSS(fsCallbackErreur, "getApplicationSignatureBase64", "Exception", e.getMessage());
+                }
+            }
+            logMessage("getApplicationSignatureBase64 Exception");
             e.printStackTrace();
         }
     }

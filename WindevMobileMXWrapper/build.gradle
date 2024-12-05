@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 ext {
     PUBLISH_GROUP_ID = 'com.zebra.windevmobilemxwrapper'
     PUBLISH_ARTIFACT_ID = 'windevmobilemxwrapper'
-    PUBLISH_VERSION = '9.0'
+    PUBLISH_VERSION = '9.1'
 }
 
 android {
@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 9
-        versionName "9.0"
+        versionCode 10
+        versionName "9.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
